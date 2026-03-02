@@ -522,9 +522,9 @@ export default function Dashboard() {
               <Card style={{ gridColumn:"1/-1" }}>
                 <STitle>Valores esenciales para el futuro (prom. 0–5)</STitle>
                 <ResponsiveContainer width="100%" height={280}>
-                  <BarChart data={valoresData} margin={{ left:0, right:40 }}>
+                  <BarChart data={valoresData} margin={{ left:0, right:40, bottom:60 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke={C6}/>
-                    <XAxis dataKey="name" tick={{ fontSize:10 }} interval={0} angle={-15} textAnchor="end" height={55}/>
+                    <XAxis dataKey="name" tick={{ fontSize:10 }} interval={0} angle={-35} textAnchor="end" height={80}/>
                     <YAxis domain={[3,5]} tick={{ fontSize:11 }}/>
                     <Tooltip content={<CT/>}/>
                     <Bar dataKey="score" name="Prom. (0-5)" radius={[6,6,0,0]} label={{ position:"top", formatter:v=>v.toFixed(1), fontSize:10 }}>
@@ -561,7 +561,7 @@ export default function Dashboard() {
             <Card style={{ gridColumn:"1/-1" }}>
               <STitle>Esencialidad de valores para AAPRESID del futuro (prom. 0–5)</STitle>
               <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={valoresData} margin={{ left:0, right:40 }}>
+                <BarChart data={valoresData} margin={{ left:0, right:40, bottom:60 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke={C6}/>
                   <XAxis dataKey="name" tick={{ fontSize:10 }} interval={0} angle={-20} textAnchor="end" height={60}/>
                   <YAxis domain={[3,5]} tick={{ fontSize:11 }}/>
