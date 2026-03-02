@@ -563,7 +563,7 @@ export default function Dashboard() {
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={valoresData} margin={{ left:0, right:40, bottom:60 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke={C6}/>
-                  <XAxis dataKey="name" tick={{ fontSize:10 }} interval={0} angle={-20} textAnchor="end" height={60}/>
+                  <XAxis dataKey="name" tick={{ fontSize:10 }} interval={0} angle={-45} textAnchor="end" height={90}/>
                   <YAxis domain={[3,5]} tick={{ fontSize:11 }}/>
                   <Tooltip content={<CT/>}/>
                   <Bar dataKey="score" name="Prom. (0-5)" radius={[6,6,0,0]} label={{ position:"top", formatter:v=>v.toFixed(1), fontSize:10 }}>
@@ -596,7 +596,7 @@ export default function Dashboard() {
             <Card>
               <STitle>Evaluación de funciones (prom. 0–5)</STitle>
               <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={funcionesData} layout="vertical" margin={{ right:40 }}>
+                <BarChart data={funcionesData} layout="vertical" margin={{ right:40, bottom:70 }}>
                   <XAxis type="number" domain={[0,5]} tick={{ fontSize:11 }}/>
                   <YAxis type="category" dataKey="name" width={160} tick={{ fontSize:11 }}/>
                   <Tooltip content={<CT/>}/>
@@ -609,7 +609,7 @@ export default function Dashboard() {
             <Card>
               <STitle>Utilidad de servicios (prom. 0–5)</STitle>
               <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={serviciosData} layout="vertical" margin={{ right:40 }}>
+                <BarChart data={serviciosData} layout="vertical" margin={{ right:40, bottom:70 }}right:40, bottom:70 }}>
                   <XAxis type="number" domain={[0,5]} tick={{ fontSize:11 }}/>
                   <YAxis type="category" dataKey="name" width={160} tick={{ fontSize:11 }}/>
                   <Tooltip content={<CT/>}/>
