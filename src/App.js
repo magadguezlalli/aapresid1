@@ -449,7 +449,7 @@ export default function Dashboard() {
 
   const HBar = ({ data, colorFn }) => (
     <ResponsiveContainer width="100%" height={Math.max(data.length*42,100)}>
-      <BarChart data={data} layout="vertical" margin={{ left:4, right:40, top:0, bottom:0 }}>
+      <BarChart data={data} layout="vertical" margin={{ left:4, right:40, top:0, bottom:40 }}>
         <XAxis type="number" domain={[0,100]} tickFormatter={v=>`${v}%`} tick={{ fontSize:11 }} />
         <YAxis type="category" dataKey="name" width={180} tick={{ fontSize:11, fill:DARK }} />
         <Tooltip content={<CT/>} formatter={(v)=>`${v}%`}/>
@@ -474,7 +474,7 @@ export default function Dashboard() {
           </div>
         </div>
         {/* TABS */}
-        <div style={{ display:"flex", gap:4, flexWrap:"wrap", marginBottom:0 }}>
+        <div style={{ display:"flex", gap:4, flexWrap:"wrap", marginbottom:40 }}>
           {tabs.map(t=>(
             <button key={t.id} onClick={()=>setTab(t.id)} style={{
               padding:"8px 16px", borderRadius:"10px 10px 0 0", border:"none", cursor:"pointer", fontSize:12,
@@ -596,7 +596,7 @@ export default function Dashboard() {
             <Card>
               <STitle>Evaluación de funciones (prom. 0–5)</STitle>
               <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={funcionesData} layout="vertical" margin={{ right:40, bottom:0 }}>
+                <BarChart data={funcionesData} layout="vertical" margin={{ right:40, bottom:40 }}>
                   <XAxis type="number" domain={[0,5]} tick={{ fontSize:11 }}/>
                   <YAxis type="category" dataKey="name" width={160} tick={{ fontSize:11 }}/>
                   <Tooltip content={<CT/>}/>
@@ -609,7 +609,7 @@ export default function Dashboard() {
             <Card>
               <STitle>Utilidad de servicios (prom. 0–5)</STitle>
               <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={serviciosData} layout="vertical" margin={{ right:40, bottom:0 }}right:40, bottom:0 }}>
+                <BarChart data={serviciosData} layout="vertical" margin={{ right:40, bottom:40 }}right:40, bottom:40 }}>
                   <XAxis type="number" domain={[0,5]} tick={{ fontSize:11 }}/>
                   <YAxis type="category" dataKey="name" width={160} tick={{ fontSize:11 }}/>
                   <Tooltip content={<CT/>}/>
@@ -721,7 +721,7 @@ export default function Dashboard() {
                 }));
                 return (
                   <ResponsiveContainer width="100%" height={Math.max(pctWords.length*42, 300)}>
-                    <BarChart data={pctWords} layout="vertical" margin={{ left:4, right:40, top:0, bottom:0 }}>
+                    <BarChart data={pctWords} layout="vertical" margin={{ left:4, right:40, top:0, bottom:40 }}>
                       <XAxis type="number" domain={[0,100]} tickFormatter={v=>`${v}%`} tick={{ fontSize:11 }}/>
                       <YAxis type="category" dataKey="text" width={150} tick={{ fontSize:11, fill:DARK }}/>
                       <Tooltip content={<CT/>} formatter={(v)=>`${v}%`}/>
