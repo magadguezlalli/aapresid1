@@ -606,26 +606,6 @@ export default function Dashboard() {
                 </BarChart>
               </ResponsiveContainer>
             </Card>
-            <Card style={{ gridColumn:"1/-1" }}>
-              <STitle>Comparativa funciones vs servicios</STitle>
-              <ResponsiveContainer width="100%" height={260}>
-                <BarChart data={[
-                  { name:"Congreso",        func: funcionesData.find(f=>f.name==="Congreso")?.score, serv: serviciosData.find(s=>s.name==="Congreso")?.score },
-                  { name:"I+D / Inv.",      func: funcionesData.find(f=>f.name==="I+D")?.score,      serv: serviciosData.find(s=>s.name==="Investigación/divulgación")?.score },
-                  { name:"Representación",  func: funcionesData.find(f=>f.name==="Representación")?.score, serv: serviciosData.find(s=>s.name==="Redes articulación")?.score },
-                  { name:"Certificación",   func: funcionesData.find(f=>f.name==="Certificación")?.score,  serv: serviciosData.find(s=>s.name==="Certificaciones")?.score },
-                  { name:"Jóvenes",         func: funcionesData.find(f=>f.name==="Semillero jóvenes")?.score, serv: serviciosData.find(s=>s.name==="Formación/Jóvenes")?.score },
-                ].filter(d=>d.func||d.serv)} margin={{ right:10 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke={C6}/>
-                  <XAxis dataKey="name" tick={{ fontSize:11 }}/>
-                  <YAxis domain={[0,5]} tick={{ fontSize:11 }}/>
-                  <Tooltip content={<CT/>}/>
-                  <Legend wrapperStyle={{ fontSize:12 }}/>
-                  <Bar dataKey="func" name="Funciones" fill={C1} radius={[4,4,0,0]}/>
-                  <Bar dataKey="serv" name="Servicios" fill={C3} radius={[4,4,0,0]}/>
-                </BarChart>
-              </ResponsiveContainer>
-            </Card>
           </div>
         )}
 
