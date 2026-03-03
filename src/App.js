@@ -609,7 +609,7 @@ export default function Dashboard() {
             <Card>
               <STitle>Utilidad de servicios (prom. 0–5)</STitle>
               <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={serviciosData} layout="vertical" margin={{ right:40, bottom:40 }}right:40, bottom:40 }}>
+                <BarChart data={serviciosData} layout="vertical" margin={{ right:40, bottom:40 }}>
                   <XAxis type="number" domain={[0,5]} tick={{ fontSize:11 }}/>
                   <YAxis type="category" dataKey="name" width={160} tick={{ fontSize:11 }}/>
                   <Tooltip content={<CT/>}/>
