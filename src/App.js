@@ -314,18 +314,6 @@ function MapSection({ data, filtered }) {
                     <div style={{ fontSize:13, fontWeight:800, color:C1 }}>"{d.topIdentidad}"</div>
                   </div>
                 )}
-                <div style={{ fontSize:10, fontWeight:700, color:C4, marginBottom:3 }}>Top valores:</div>
-                {d.valScores?.map((v,i)=>(
-                  <div key={i} style={{ fontSize:9, color:DARK, marginBottom:2 }}>
-                    <span style={{ color:PALETTE[i], fontWeight:700 }}>● </span>{v.name}: <strong>{v.avg?.toFixed(1)}/5</strong>
-                  </div>
-                ))}
-                <div style={{ fontSize:10, fontWeight:700, color:C4, margin:"6px 0 3px" }}>Top funciones:</div>
-                {d.funScores?.map((f,i)=>(
-                  <div key={i} style={{ fontSize:9, color:DARK, marginBottom:2 }}>
-                    <span style={{ color:PALETTE[i], fontWeight:700 }}>● </span>{f.name}: <strong>{f.avg?.toFixed(1)}/5</strong>
-                  </div>
-                ))}
                 <div style={{ fontSize:10, fontWeight:700, color:C4, margin:"6px 0 3px" }}>Beneficios:</div>
                 {d.topBen?.map(([b],i)=>(
                   <div key={i} style={{ fontSize:9, color:DARK, marginBottom:2 }}>
