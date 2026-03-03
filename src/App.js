@@ -519,8 +519,8 @@ export default function Dashboard() {
               </Card>
               <Card style={{ gridColumn:"1/-1" }}>
                 <STitle>Valores esenciales para el futuro (prom. 0–5)</STitle>
-                <ResponsiveContainer width="100%" height={420}>
-                  <BarChart data={valoresData} margin={{ left:0, right:40, bottom:90 }}>
+                <ResponsiveContainer width="100%" height={480}>
+                  <BarChart data={valoresData} margin={{ left:0, right:40, bottom:120 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke={C6}/>
                     <XAxis dataKey="name" tick={{ fontSize:10 }} interval={0} angle={-35} textAnchor="end" height={80}/>
                     <YAxis domain={[3,5]} tick={{ fontSize:11 }}/>
@@ -559,7 +559,7 @@ export default function Dashboard() {
             <Card style={{ gridColumn:"1/-1" }}>
               <STitle>Esencialidad de valores para AAPRESID del futuro (prom. 0–5)</STitle>
               <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={valoresData} margin={{ left:0, right:40, bottom:90 }}>
+                <BarChart data={valoresData} margin={{ left:0, right:40, bottom:120 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke={C6}/>
                   <XAxis dataKey="name" tick={{ fontSize:10 }} interval={0} angle={-20} textAnchor="end" height={60}/>
                   <YAxis domain={[3,5]} tick={{ fontSize:11 }}/>
