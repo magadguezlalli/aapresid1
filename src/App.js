@@ -5,16 +5,28 @@ import {
 } from "recharts";
 
 // ─── PALETTE ───────────────────────────────────────────────────────────────
-const C1 = "#D4500A"; // dark orange
-const C2 = "#F07832"; // orange
-const C3 = "#E8C030"; // yellow
-const C4 = "#D4A850"; // golden
-const C5 = "#E8C878"; // sand
-const C6 = "#F5E6B4"; // cream
+const C1 = "#D4500A";
+const C2 = "#F07832";
+const C3 = "#E8C030";
+const C4 = "#D4A850";
+const C5 = "#E8C878";
+const C6 = "#F5E6B4";
 const PALETTE = [C1, C2, C3, C4, C5, C6];
 const BG = "#FDFAF4";
 const DARK = "#2C1A00";
 const CARD_BG = "#FFFFFF";
+
+// ─── VISION 10 AÑOS — conteo real de respuestas ────────────────────────────
+const VISION_WORDS = [
+  { text: "Red de innovación en sustentabilidad", count: 54 },
+  { text: "Espacio de articulación ciencia-sociedad", count: 40 },
+  { text: "Referencia técnica siembra directa", count: 5 },
+  { text: "Bioeconomía y tecnologías digitales", count: 1 },
+  { text: "Referencia en sistemas agropecuarios", count: 1 },
+  { text: "Herramientas para productividad sustentable", count: 1 },
+  { text: "Trabajo en equipo y comunicación", count: 1 },
+  { text: "Oportunidades para productores", count: 1 },
+];
 
 // ─── WORD CLOUD DATA ───────────────────────────────────────────────────────
 const WORDS = [
@@ -48,7 +60,6 @@ const WORDS = [
   { text:"Comunidad", count:1 },
 ];
 
-// identity word per row index (matches RAW array order)
 const IDENTITY_BY_IDX = {"0":"Sustentabilidad","1":"Suelo","2":"Red","3":"Sustentabilidad","4":"Regeneración","5":"Conservación","6":"Sistema","7":"Reciprocidad","8":"Vanguardia","9":"Innovación","10":"Innovación","11":"Regeneración","12":"Innovación","13":"Sustentabilidad","14":"Innovación","15":"Innovación","16":"Innovación","17":"Sostenibilidad","18":"Sostenibilidad","19":"Sustentabilidad","20":"Desafío","21":"Productor","22":"Excelencia","23":"Sustentabilidad","24":"Innovación","25":"Sustentabilidad","26":"Innovación","27":"Sustentabilidad","28":"Innovación","29":"Innovación","30":"Innovación","31":"Sustentabilidad","32":"Innovación","33":"Referente","34":"Naturaleza","35":"Sostenibilidad","36":"Sustentabilidad","37":"Sustentabilidad","38":"Regeneración","39":"Suelo","40":"Sistémica","41":"Innovación","42":"Innovación","43":"Innovación","44":"Innovación","45":"Resiliencia","46":"Innovación","47":"Conservación","48":"Sustentabilidad","49":"Regeneración","50":"Integrar","51":"Innovación","52":null,"53":"Productor","54":"Sustentabilidad","55":"Suelo","56":"Sustentabilidad","57":"Sustentabilidad","58":"Sustentabilidad","59":"Regenerativo","60":"Innovación","61":"Regeneración","62":"Sustentabilidad","63":"Resiliencia","64":"Conjunto","65":"Fiabilidad","66":"Conocimiento","67":"Horizontalidad","68":"Sustentabilidad","69":"Equipo","70":"Sustentabilidad","71":"Innovación","72":"Innovación","73":"Sustentabilidad","74":"Sustentabilidad","75":"Sustentabilidad","76":"Ciencia","77":"Autenticidad","78":"Sustentabilidad","79":"Sinergia","80":"Pioneros","81":"Sustentabilidad","82":"Sostenibilidad","83":"Innovación","84":"Sustentabilidad","85":"Innovación","86":"Sostenibilidad","87":"Innovación","88":"Sustentabilidad","89":"Sustentabilidad","90":"Conciencia","91":"Diferenciación","92":"Sustentología","93":"Prestigio","94":"Integración","95":"Comunidad","96":"Sustentabilidad","97":"Esencia institucional","98":"Regenerativo","99":"Sustentabilidad","100":"Tecnología sustentable","101":"Innovación","102":"Sostenibilidad","103":"Aplicabilidad"};
 
 // ─── RAW DATA ──────────────────────────────────────────────────────────────
@@ -63,7 +74,6 @@ const ALL_ROLES = [
   "Otro",
   "Integrante de Mesas Técnicas / Chacras",
   "Presidente Honorario",
-  "Miembro de la Comisión Directiva"
 ];
 const ROL_SHORT = {
   "Referente regional (Presidente/a, Vicepresidente/a o Tesorero/a)": "Referente regional",
@@ -103,14 +113,12 @@ const CT = ({ active, payload, label }) => {
   );
 };
 
-// ─── CARD ──────────────────────────────────────────────────────────────────
 const Card = ({ children, style={} }) => (
   <div style={{ background:CARD_BG, borderRadius:14, padding:20, boxShadow:"0 2px 16px rgba(180,100,0,0.08)", border:`1px solid ${C6}`, ...style }}>
     {children}
   </div>
 );
 
-// ─── KPI CARD ──────────────────────────────────────────────────────────────
 const KPI = ({ icon, value, label, sub }) => (
   <Card style={{ display:"flex", alignItems:"center", gap:14, padding:"18px 20px" }}>
     <span style={{ fontSize:30 }}>{icon}</span>
@@ -122,7 +130,6 @@ const KPI = ({ icon, value, label, sub }) => (
   </Card>
 );
 
-// ─── SECTION TITLE ─────────────────────────────────────────────────────────
 const STitle = ({ children }) => (
   <h2 style={{ fontFamily:"Georgia,serif", fontSize:18, color:C1, borderBottom:`2px solid ${C3}`, paddingBottom:8, marginBottom:20, letterSpacing:"0.01em", marginTop:0 }}>
     {children}
@@ -136,30 +143,23 @@ function WordCloud({ words }) {
   const max = sorted[0]?.count || 1;
   const minFont = 13, maxFont = 72;
   const seed = (i) => ((i * 2654435761) >>> 0) / 4294967296;
-
-  // Simple grid placement: bigger words first, place in rows with random x offset
   const rows = [];
   let currentRow = [], rowWidth = 0;
   const maxRowWidth = 600;
-
   sorted.forEach((w, i) => {
     const fontSize = Math.round(minFont + (w.count / max) * (maxFont - minFont));
     const approxW = w.text.length * fontSize * 0.6 + 20;
     if (rowWidth + approxW > maxRowWidth && currentRow.length > 0) {
-      rows.push(currentRow);
-      currentRow = [];
-      rowWidth = 0;
+      rows.push(currentRow); currentRow = []; rowWidth = 0;
     }
     currentRow.push({ ...w, fontSize, approxW });
     rowWidth += approxW + 8;
   });
   if (currentRow.length > 0) rows.push(currentRow);
-
   const totalHeight = rows.reduce((acc, row) => {
     const maxFS = Math.max(...row.map(w => w.fontSize));
     return acc + maxFS + 14;
   }, 30);
-
   let y = 20;
   const layoutWords = [];
   rows.forEach((row, ri) => {
@@ -172,21 +172,13 @@ function WordCloud({ words }) {
     });
     y += maxFS + 14;
   });
-
   return (
     <div style={{ background:`linear-gradient(135deg, ${C6}44, #fff)`, borderRadius:12, padding:16, border:`1px solid ${C5}` }}>
       <svg viewBox={`0 0 640 ${totalHeight + 30}`} width="100%" style={{ display:"block" }}>
         {layoutWords.map((w, i) => (
-          <text
-            key={i}
-            x={w.x}
-            y={w.y}
-            fontSize={w.fontSize}
-            fill={PALETTE[i % PALETTE.length]}
+          <text key={i} x={w.x} y={w.y} fontSize={w.fontSize} fill={PALETTE[i % PALETTE.length]}
             fontWeight={w.count >= 5 ? "800" : w.count >= 2 ? "600" : "400"}
-            style={{ fontFamily:"Georgia, serif" }}
-            opacity={0.85 + (w.count / max) * 0.15}
-          >
+            style={{ fontFamily:"Georgia, serif" }} opacity={0.85 + (w.count / max) * 0.15}>
             {w.text}
           </text>
         ))}
@@ -196,17 +188,15 @@ function WordCloud({ words }) {
 }
 
 // ─── MAP COMPONENT ─────────────────────────────────────────────────────────
-// ARG_PATH generated by Python from real Natural Earth border coordinates
-// Projection: lon[-74,-51.5] lat[-56,-21] -> viewBox 300x560 pad=18
 const ARG_PATH = "M 69.0,34.5 L 86.2,34.5 L 89.8,45.2 L 98.0,45.2 L 103.4,36.6 L 114.8,34.5 L 124.1,34.5 L 130.9,43.6 L 135.7,32.8 L 151.3,36.4 L 169.6,30.4 L 182.3,32.8 L 207.3,3.6 L 206.6,33.1 L 208.9,51.8 L 213.6,62.5 L 217.5,67.3 L 221.7,79.2 L 231.2,92.3 L 245.4,109.2 L 253.8,94.1 L 257.1,96.9 L 255.5,108.3 L 253.8,122.8 L 240.8,119.7 L 231.9,126.7 L 229.1,145.6 L 222.7,157.7 L 214.9,156.8 L 210.7,159.2 L 207.3,172.7 L 204.8,194.7 L 214.8,211.9 L 217.8,219.1 L 221.1,231.0 L 214.3,249.3 L 215.9,260.8 L 220.5,271.8 L 212.0,273.3 L 193.4,280.1 L 165.4,286.7 L 158.0,294.1 L 154.9,310.1 L 152.9,318.6 L 125.7,329.0 L 122.4,348.0 L 119.5,359.5 L 116.7,371.9 L 119.8,385.2 L 105.6,389.9 L 106.1,406.7 L 102.8,421.5 L 94.1,436.9 L 82.9,455.5 L 74.8,466.8 L 78.9,481.5 L 88.6,493.8 L 82.1,504.9 L 94.7,512.5 L 112.1,527.9 L 124.0,529.7 L 129.2,524.6 L 117.7,519.1 L 82.4,511.5 L 70.3,496.5 L 64.9,482.0 L 53.2,474.8 L 41.0,459.2 L 35.6,445.0 L 41.5,429.7 L 53.2,414.7 L 49.6,392.4 L 47.3,370.0 L 47.7,346.9 L 44.5,324.6 L 47.2,309.6 L 52.8,287.0 L 58.9,264.9 L 71.0,242.0 L 70.9,220.3 L 66.9,197.4 L 76.7,174.8 L 70.4,152.3 L 76.4,130.0 L 82.4,108.0 L 94.6,92.7 L 99.9,70.5 L 105.9,55.7 L 117.6,34.5 Z";
 
 const MAP_NODES = [
-  { key:"Nodo NOA",            label:"Nodo NOA",          city:"NOA",                  x:118.8, y:74.6  },
-  { key:"Nodo Litoral",        label:"Nodo Litoral",      city:"Videla, Santa Fe",     x:179.9, y:145.3 },
-  { key:"Nodo Oeste",          label:"Nodo Oeste",        city:"Río Cuarto / Córdoba", x:131.2, y:199.6 },
-  { key:"Nodo Centro",         label:"Nodo Centro",       city:"9 de Julio, BA",       x:171.9, y:234.3 },
-  { key:"Nodo Oeste Medanoso", label:"Nodo Oeste Med.",   city:"Pehuajó, BA",          x:160.0, y:240.3 },
-  { key:"Nodo Sur",            label:"Nodo Sur",          city:"Tandil, BA",           x:192.5, y:262.3 },
+  { key:"Nodo NOA",            label:"Nodo NOA",        city:"NOA",                  x:118.8, y:74.6  },
+  { key:"Nodo Litoral",        label:"Nodo Litoral",    city:"Videla, Santa Fe",     x:179.9, y:145.3 },
+  { key:"Nodo Oeste",          label:"Nodo Oeste",      city:"Río Cuarto / Córdoba", x:131.2, y:199.6 },
+  { key:"Nodo Centro",         label:"Nodo Centro",     city:"9 de Julio, BA",       x:171.9, y:234.3 },
+  { key:"Nodo Oeste Medanoso", label:"Nodo Oeste Med.", city:"Pehuajó, BA",          x:160.0, y:240.3 },
+  { key:"Nodo Sur",            label:"Nodo Sur",        city:"Tandil, BA",           x:192.5, y:262.3 },
 ];
 
 function MapSection({ data, filtered }) {
@@ -218,21 +208,16 @@ function MapSection({ data, filtered }) {
       const sub = filtered.filter(r => r.region === n.key);
       const total = sub.length;
       if (!total) { out[n.key] = { total:0 }; return; }
-      const misionPct  = pct(sub.map(r=>r.mision), v=>v?.startsWith("4")||v?.startsWith("5"));
-      const satisfPct  = pct(sub.map(r=>r.satisf),  v=>v>=4);
-      const vKeys = Object.keys(sub[0]?.valores||{});
-      const valScores  = vKeys.map(k=>({name:k, avg:avg(sub.map(r=>r.valores[k]))})).sort((a,b)=>b.avg-a.avg).slice(0,3);
-      const fKeys = Object.keys(sub[0]?.funciones||{});
-      const funScores  = fKeys.map(k=>({name:k, avg:avg(sub.map(r=>r.funciones[k]))})).sort((a,b)=>b.avg-a.avg).slice(0,3);
-      const topBen     = countSplit(sub,"beneficios").slice(0,3);
-      const topRie     = countSplit(sub,"riesgos").slice(0,3);
-      const identMap   = {};
+      const misionPct = pct(sub.map(r=>r.mision), v=>v?.startsWith("4")||v?.startsWith("5"));
+      const topBen    = countSplit(sub,"beneficios").slice(0,3);
+      const topRie    = countSplit(sub,"riesgos").slice(0,3);
+      const identMap  = {};
       sub.forEach(r => {
         const gi = data.indexOf(r);
         const raw = IDENTITY_BY_IDX[String(gi)];
         if (!raw) return;
         let w = raw.trim().toLowerCase();
-        if (w.includes("sustent"))  w = "Sustentabilidad";
+        if (w.includes("sustent"))       w = "Sustentabilidad";
         else if (w.includes("sostenib")) w = "Sostenibilidad";
         else if (w.includes("innov"))    w = "Innovación";
         else if (w.includes("regener"))  w = "Regeneración";
@@ -240,22 +225,18 @@ function MapSection({ data, filtered }) {
         identMap[w] = (identMap[w]||0)+1;
       });
       const topIdentidad = Object.entries(identMap).sort((a,b)=>b[1]-a[1])[0]?.[0] || null;
-      out[n.key] = { total, misionPct, satisfPct, valScores, funScores, topBen, topRie, topIdentidad };
+      out[n.key] = { total, misionPct, topBen, topRie, topIdentidad };
     });
     return out;
   }, [filtered, data]);
-
-  const h = hovered ? nodeData[hovered.key] : null;
 
   return (
     <Card>
       <STitle>🗺️ Mapa de Nodos</STitle>
       <div style={{ display:"flex", gap:20, alignItems:"stretch", flexWrap:"wrap" }}>
-
         {/* MAP */}
         <svg viewBox="0 0 300 560" preserveAspectRatio="xMidYMid slice" style={{ width:260, flexShrink:0, borderRadius:8, border:`1px solid ${C5}`, background:"#c8dff0", alignSelf:"stretch", height:"auto", minHeight:"100%" }}>
           <path d={ARG_PATH} fill="#f2ead6" stroke="#9e7a3a" strokeWidth="1.4" strokeLinejoin="round"/>
-          {/* Labels */}
           <text x="145" y="18" textAnchor="middle" fill="#aaa" fontSize="7" fontStyle="italic">BOLIVIA</text>
           <text x="238" y="56" textAnchor="middle" fill="#aaa" fontSize="7" fontStyle="italic">PARAGUAY</text>
           <text x="262" y="125" textAnchor="middle" fill="#aaa" fontSize="7" fontStyle="italic">BRASIL</text>
@@ -263,12 +244,10 @@ function MapSection({ data, filtered }) {
           <text x="36" y="172" textAnchor="middle" fill="#aaa" fontSize="7" fontStyle="italic">CHILE</text>
           <text x="272" y="285" textAnchor="middle" fill="#88aacc" fontSize="7" fontStyle="italic">ATLÁNTICO</text>
           <text x="26" y="365" textAnchor="middle" fill="#88aacc" fontSize="7" fontStyle="italic">PACÍFICO</text>
-          {/* Connection lines */}
           {MAP_NODES.map((n,i) => MAP_NODES.slice(i+1).map(m => (
             <line key={`${n.key}-${m.key}`} x1={n.x} y1={n.y} x2={m.x} y2={m.y}
               stroke={C4} strokeWidth="0.7" opacity="0.4" strokeDasharray="3,2"/>
           )))}
-          {/* Nodes */}
           {MAP_NODES.map(n => {
             const isHov = hovered?.key === n.key;
             return (
@@ -283,7 +262,7 @@ function MapSection({ data, filtered }) {
           })}
         </svg>
 
-        {/* CARDS GRID */}
+        {/* CARDS GRID — sin satisfacción */}
         <div style={{ flex:1, display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:12, alignContent:"start" }}>
           {MAP_NODES.map(n => {
             const d = nodeData[n.key];
@@ -298,15 +277,10 @@ function MapSection({ data, filtered }) {
               <div key={n.key} style={{ background:"#fff", border:`2px solid ${C2}`, borderRadius:10, padding:12, boxShadow:"0 2px 10px rgba(180,100,0,0.1)" }}>
                 <div style={{ fontWeight:800, color:C1, fontSize:13, marginBottom:1 }}>{n.label}</div>
                 <div style={{ fontSize:10, color:"#aaa", marginBottom:8 }}>{n.city}</div>
-                <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:6, marginBottom:8 }}>
-                  <div style={{ background:C6, borderRadius:6, padding:"5px 4px", textAlign:"center" }}>
-                    <div style={{ fontSize:16, fontWeight:800, color:C1 }}>{d.misionPct}%</div>
-                    <div style={{ fontSize:8, color:"#666" }}>Identificación misión</div>
-                  </div>
-                  <div style={{ background:C6, borderRadius:6, padding:"5px 4px", textAlign:"center" }}>
-                    <div style={{ fontSize:16, fontWeight:800, color:C1 }}>{d.satisfPct}%</div>
-                    <div style={{ fontSize:8, color:"#666" }}>Satisfacción</div>
-                  </div>
+                {/* Solo identificación con la misión */}
+                <div style={{ background:C6, borderRadius:6, padding:"5px 4px", textAlign:"center", marginBottom:8 }}>
+                  <div style={{ fontSize:16, fontWeight:800, color:C1 }}>{d.misionPct}%</div>
+                  <div style={{ fontSize:8, color:"#666" }}>Identificación misión</div>
                 </div>
                 {d.topIdentidad && (
                   <div style={{ background:`${C3}44`, borderRadius:6, padding:"5px 8px", marginBottom:8, textAlign:"center" }}>
@@ -351,23 +325,12 @@ export default function Dashboard() {
 
   const n = filtered.length;
 
-  // ── Computed metrics ─────────────────────────────
   const misionPct = pct(filtered.map(r=>r.mision), v=>v?.startsWith("4")||v?.startsWith("5"));
-  const satisfPct = pct(filtered.map(r=>r.satisf), v=>v>=4);
-  const participaSi = filtered.filter(r=>r.participacion==="Sí").length;
-  const participaPct = n ? Math.round(participaSi/n*100) : 0;
 
   const misionDist = useMemo(() => {
     const map = {};
     filtered.forEach(r => { if(r.mision) { const k=r.mision.replace(/^\d\. /,""); map[k]=(map[k]||0)+1; } });
     return Object.entries(map).sort((a,b)=>b[1]-a[1]).map(([name,v])=>({ name, pct: Math.round(v/n*100), count:v }));
-  }, [filtered, n]);
-
-  const satisfDist = useMemo(() => {
-    const labels = {5:"5 - Muy satisfecho",4:"4 - Satisfecho",3:"3 - Neutral",2:"2 - Poco",1:"1 - Insatisfecho"};
-    const map = {};
-    filtered.forEach(r => { if(r.satisf!=null){ const k=labels[r.satisf]||r.satisf; map[k]=(map[k]||0)+1; }});
-    return Object.entries(map).sort((a,b)=>b[0].localeCompare(a[0])).map(([name,v])=>({ name, pct: Math.round(v/n*100), count:v }));
   }, [filtered, n]);
 
   const valoresData = useMemo(() => {
@@ -419,8 +382,6 @@ export default function Dashboard() {
 
   const beneficiosData = useMemo(() => countSplit(filtered,"beneficios").map(([name,v])=>({ name, pct:Math.round(v/n*100), count:v })), [filtered,n]);
   const riesgosData    = useMemo(() => countSplit(filtered,"riesgos").map(([name,v])=>({ name, pct:Math.round(v/n*100), count:v })), [filtered,n]);
-  const aspectosPosData = useMemo(() => countSplit(filtered,"aspectos_pos").map(([name,v])=>({ name:name.replace(/B$/,""), pct:Math.round(v/n*100), count:v })), [filtered,n]);
-  const aspectosCambiarData = useMemo(() => countSplit(filtered,"aspectos_cambiar").map(([name,v])=>({ name, pct:Math.round(v/n*100), count:v })), [filtered,n]);
 
   const participacionData = useMemo(() => {
     const map={Sí:0,"Ns/Nc":0,No:0};
@@ -428,16 +389,15 @@ export default function Dashboard() {
     return Object.entries(map).filter(([,v])=>v>0).map(([name,v])=>({ name, pct:Math.round(v/n*100), count:v }));
   }, [filtered,n]);
 
+  // Tabs sin Desempeño ni Aspectos
   const tabs = [
-    { id:"resumen", label:"Resumen" },
-    { id:"perfil", label:"Perfil" },
-    { id:"valores", label:"Valores y Misión" },
-    { id:"desempeño", label:"Desempeño" },
-    { id:"textos", label:"Beneficios y Riesgos" },
-    { id:"aspectos", label:"Aspectos Positivos y Cambios" },
-    { id:"factores", label:"Factores de Alcance" },
+    { id:"resumen",   label:"Resumen" },
+    { id:"perfil",    label:"Perfil" },
+    { id:"valores",   label:"Valores y Misión" },
+    { id:"textos",    label:"Beneficios y Riesgos" },
+    { id:"factores",  label:"Factores de Alcance" },
     { id:"identidad", label:"Identidad" },
-    { id:"mapa", label:"Mapa" },
+    { id:"mapa",      label:"Mapa" },
   ];
 
   const FSelect = ({ label, val, opts, onChange }) => (
@@ -476,8 +436,7 @@ export default function Dashboard() {
             <p style={{ margin:0, color:"rgba(255,255,255,0.7)", fontSize:13 }}>Encuesta institucional · 104 respuestas</p>
           </div>
         </div>
-        {/* TABS */}
-        <div style={{ display:"flex", gap:4, flexWrap:"wrap", marginbottom:40 }}>
+        <div style={{ display:"flex", gap:4, flexWrap:"wrap" }}>
           {tabs.map(t=>(
             <button key={t.id} onClick={()=>setTab(t.id)} style={{
               padding:"8px 16px", borderRadius:"10px 10px 0 0", border:"none", cursor:"pointer", fontSize:12,
@@ -499,32 +458,25 @@ export default function Dashboard() {
             Limpiar filtros
           </button>
         )}
-
       </div>
 
       <div style={{ padding:"16px 12px", maxWidth:1100, margin:"0 auto" }}>
 
-        {/* ── RESUMEN ── */}
+        {/* ── RESUMEN — solo 2 KPIs + misión + valores ── */}
         {tab==="resumen" && (
           <>
             <div style={{ display:"grid", gridTemplateColumns:"repeat(2,1fr)", gap:14, marginBottom:24 }}>
               <KPI icon="👥" value={104} label="Respuestas totales" sub="encuesta institucional"/>
               <KPI icon="🎯" value={`${misionPct}%`} label="Identificación con la misión" sub="Puntaje 4 o 5"/>
-              <KPI icon="⭐" value={`${satisfPct}%`} label="Satisfacción participación" sub="Puntaje 4 o 5"/>
-              <KPI icon="🌱" value={`${participaPct}%`} label="Interés en nuevas producciones" sub="Respondieron Sí"/>
             </div>
-            <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:18 }}>
+            <div style={{ display:"grid", gridTemplateColumns:"1fr", gap:18 }}>
               <Card>
                 <STitle>Identificación con la misión</STitle>
                 <HBar data={misionDist} colorFn={i=>[C1,C2,C3,C5][i]||C5}/>
               </Card>
               <Card>
-                <STitle>Satisfacción con la participación</STitle>
-                <HBar data={satisfDist} colorFn={i=>[C1,C2,C3,C4,C5][i]||C5}/>
-              </Card>
-              <Card style={{ gridColumn:"1/-1" }}>
                 <STitle>Valores esenciales para el futuro (prom. 0–5)</STitle>
-                <ResponsiveContainer width="100%" height={480}>
+                <ResponsiveContainer width="100%" height={340}>
                   <BarChart data={valoresData} layout="vertical" margin={{ left:160, right:60, top:0, bottom:0 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke={C6}/>
                     <XAxis type="number" domain={[3,5]} tick={{ fontSize:11 }}/>
@@ -558,7 +510,7 @@ export default function Dashboard() {
           </div>
         )}
 
-        {/* ── VALORES ── */}
+        {/* ── VALORES Y MISIÓN — con Visión a 10 años ── */}
         {tab==="valores" && (
           <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:18 }}>
             <Card style={{ gridColumn:"1/-1" }}>
@@ -579,37 +531,24 @@ export default function Dashboard() {
               <STitle>Identificación con la misión</STitle>
               <HBar data={misionDist} colorFn={i=>[C1,C2,C3,C5][i]||C5}/>
             </Card>
-          </div>
-        )}
-
-        {/* ── DESEMPEÑO ── */}
-        {tab==="desempeño" && (
-          <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:18 }}>
-            <Card>
-              <STitle>Evaluación de funciones (prom. 0–5)</STitle>
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={funcionesData} layout="vertical" margin={{ right:40, bottom:40 }}>
-                  <XAxis type="number" domain={[0,5]} tick={{ fontSize:11 }}/>
-                  <YAxis type="category" dataKey="name" width={160} tick={{ fontSize:11 }}/>
-                  <Tooltip content={<CT/>}/>
-                  <Bar dataKey="score" name="Prom. (0-5)" radius={[0,6,6,0]} label={{ position:"right", formatter:v=>v.toFixed(1), fontSize:11 }}>
-                    {funcionesData.map((_,i)=><Cell key={i} fill={i===0?C1:C2}/>)}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
-            </Card>
-            <Card>
-              <STitle>Utilidad de servicios (prom. 0–5)</STitle>
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={serviciosData} layout="vertical" margin={{ right:40, bottom:40 }}>
-                  <XAxis type="number" domain={[0,5]} tick={{ fontSize:11 }}/>
-                  <YAxis type="category" dataKey="name" width={160} tick={{ fontSize:11 }}/>
-                  <Tooltip content={<CT/>}/>
-                  <Bar dataKey="score" name="Prom. (0-5)" radius={[0,6,6,0]} label={{ position:"right", formatter:v=>v.toFixed(1), fontSize:11 }}>
-                    {serviciosData.map((_,i)=><Cell key={i} fill={i===0?C1:C3}/>)}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
+            {/* VISIÓN A 10 AÑOS */}
+            <Card style={{ gridColumn:"1/-1" }}>
+              <STitle>🔭 Visión a 10 años — ¿Cuál debería ser el papel de AAPRESID?</STitle>
+              <p style={{ fontSize:13, color:"#888", marginTop:-12, marginBottom:20 }}>
+                Distribución de las 104 respuestas sobre el rol futuro de la Asociación.
+              </p>
+              <WordCloud words={VISION_WORDS} />
+              <div style={{ marginTop:24 }}>
+                <HBar
+                  data={[
+                    { name:"Red de innovación en sustentabilidad agropecuaria", pct:52, count:54 },
+                    { name:"Espacio articulación ciencia-productores-sociedad", pct:38, count:40 },
+                    { name:"Referencia técnica de la siembra directa", pct:5, count:5 },
+                    { name:"Respuestas únicas / otras visiones", pct:5, count:5 },
+                  ]}
+                  colorFn={i=>[C1,C2,C3,C5][i]||C5}
+                />
+              </div>
             </Card>
           </div>
         )}
@@ -634,26 +573,6 @@ export default function Dashboard() {
           </div>
         )}
 
-        {/* ── ASPECTOS ── */}
-        {tab==="aspectos" && (
-          <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:18 }}>
-            <Card>
-              <STitle>👍 Aspectos positivos del funcionamiento actual (%)</STitle>
-              <p style={{ fontSize:12, color:"#888", marginTop:-12, marginBottom:12 }}>
-                % de respuestas que mencionan cada aspecto (múltiple selección)
-              </p>
-              <HBar data={aspectosPosData} colorFn={i=>[C2,C1,C3,C4,C5,C6][i%6]}/>
-            </Card>
-            <Card>
-              <STitle>🔧 Aspectos a cambiar (%)</STitle>
-              <p style={{ fontSize:12, color:"#888", marginTop:-12, marginBottom:12 }}>
-                % de respuestas que mencionan cada aspecto (múltiple selección)
-              </p>
-              <HBar data={aspectosCambiarData} colorFn={i=>PALETTE[i%PALETTE.length]}/>
-            </Card>
-          </div>
-        )}
-
         {/* ── FACTORES ── */}
         {tab==="factores" && (
           <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:18 }}>
@@ -672,7 +591,6 @@ export default function Dashboard() {
 
         {/* ── IDENTIDAD ── */}
         {tab==="identidad" && (() => {
-          // Build word counts from filtered data
           const identWords = (() => {
             const map = {};
             filtered.forEach(r => {
@@ -680,10 +598,10 @@ export default function Dashboard() {
               const raw = IDENTITY_BY_IDX[String(gi)];
               if (!raw) return;
               let w = raw.trim().toLowerCase();
-              if (w.includes("sustent")) w = "Sustentabilidad";
+              if (w.includes("sustent"))       w = "Sustentabilidad";
               else if (w.includes("sostenib")) w = "Sostenibilidad";
-              else if (w.includes("innov")) w = "Innovación";
-              else if (w.includes("regener")) w = "Regeneración";
+              else if (w.includes("innov"))    w = "Innovación";
+              else if (w.includes("regener"))  w = "Regeneración";
               else w = w.charAt(0).toUpperCase() + w.slice(1);
               if (w.length > 22) w = w.slice(0,22)+"…";
               map[w] = (map[w]||0)+1;
@@ -691,34 +609,34 @@ export default function Dashboard() {
             return Object.entries(map).sort((a,b)=>b[1]-a[1]).map(([text,count])=>({text,count}));
           })();
           return (
-          <Card>
-            <STitle>💬 Identidad de AAPRESID en una palabra</STitle>
-            <p style={{ fontSize:13, color:"#888", marginTop:-12, marginBottom:20 }}>
-              Se pidió a los participantes que definieran en una sola palabra la identidad futura de AAPRESID. El tamaño refleja la frecuencia de cada término.
-            </p>
-            <WordCloud words={identWords} />
-            <div style={{ marginTop:24 }}>
-              <STitle>Frecuencia por término (%)</STitle>
-              {(() => {
-                const total = identWords.reduce((s,w)=>s+w.count,0);
-                const pctWords = [...identWords].sort((a,b)=>b.count-a.count).map(w=>({
-                  ...w, pct: total ? Math.round(w.count/total*100) : 0
-                }));
-                return (
-                  <ResponsiveContainer width="100%" height={Math.max(pctWords.length*42, 300)}>
-                    <BarChart data={pctWords} layout="vertical" margin={{ left:4, right:40, top:0, bottom:40 }}>
-                      <XAxis type="number" domain={[0,100]} tickFormatter={v=>`${v}%`} tick={{ fontSize:11 }}/>
-                      <YAxis type="category" dataKey="text" width={150} tick={{ fontSize:11, fill:DARK }}/>
-                      <Tooltip content={<CT/>} formatter={(v)=>`${v}%`}/>
-                      <Bar dataKey="pct" name="%" radius={[0,6,6,0]} label={{ position:"right", formatter:v=>`${v}%`, fontSize:11, fill:DARK }}>
-                        {pctWords.map((_,i)=><Cell key={i} fill={PALETTE[i%PALETTE.length]}/>)}
-                      </Bar>
-                    </BarChart>
-                  </ResponsiveContainer>
-                );
-              })()}
-            </div>
-          </Card>
+            <Card>
+              <STitle>💬 Identidad de AAPRESID en una palabra</STitle>
+              <p style={{ fontSize:13, color:"#888", marginTop:-12, marginBottom:20 }}>
+                Se pidió a los participantes que definieran en una sola palabra la identidad futura de AAPRESID. El tamaño refleja la frecuencia de cada término.
+              </p>
+              <WordCloud words={identWords} />
+              <div style={{ marginTop:24 }}>
+                <STitle>Frecuencia por término (%)</STitle>
+                {(() => {
+                  const total = identWords.reduce((s,w)=>s+w.count,0);
+                  const pctWords = [...identWords].sort((a,b)=>b.count-a.count).map(w=>({
+                    ...w, pct: total ? Math.round(w.count/total*100) : 0
+                  }));
+                  return (
+                    <ResponsiveContainer width="100%" height={Math.max(pctWords.length*42, 300)}>
+                      <BarChart data={pctWords} layout="vertical" margin={{ left:4, right:40, top:0, bottom:40 }}>
+                        <XAxis type="number" domain={[0,100]} tickFormatter={v=>`${v}%`} tick={{ fontSize:11 }}/>
+                        <YAxis type="category" dataKey="text" width={150} tick={{ fontSize:11, fill:DARK }}/>
+                        <Tooltip content={<CT/>} formatter={(v)=>`${v}%`}/>
+                        <Bar dataKey="pct" name="%" radius={[0,6,6,0]} label={{ position:"right", formatter:v=>`${v}%`, fontSize:11, fill:DARK }}>
+                          {pctWords.map((_,i)=><Cell key={i} fill={PALETTE[i%PALETTE.length]}/>)}
+                        </Bar>
+                      </BarChart>
+                    </ResponsiveContainer>
+                  );
+                })()}
+              </div>
+            </Card>
           );
         })()}
 
