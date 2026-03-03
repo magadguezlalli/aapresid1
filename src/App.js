@@ -72,7 +72,7 @@ const ROL_SHORT = {
   "Otro": "Otro",
   "Integrante de Mesas Técnicas / Chacras": "Mesas Técnicas",
   "Presidente Honorario": "Pres. Honorario",
-  "Miembro de la Comisión Directiva": "Grupos Directivos"
+  "Miembro de la Comisión Directiva": "Com. Directiva"
 };
 
 function avg(arr) {
