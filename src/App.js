@@ -667,15 +667,7 @@ export default function Dashboard() {
               <p style={{ fontSize:12, color:"#888", marginTop:-12, marginBottom:12 }}>
                 % de respuestas que mencionan cada factor (múltiple selección)
               </p>
-              <ResponsiveContainer width="100%" height={360}>
-                <PieChart>
-                  <Pie data={factoresData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={130} label={({name,value})=>`${name}: ${value}%`} labelLine={true}>
-                    {factoresData.map((_,i)=><Cell key={i} fill={PALETTE[i%PALETTE.length]}/>)}
-                  </Pie>
-                  <Tooltip formatter={(v,n)=>[v+"%", n]}/>
-                  <Legend/>
-                </PieChart>
-              </ResponsiveContainer>
+              <HBar data={factoresData} colorFn={i=>PALETTE[i%PALETTE.length]}/>
             </Card>
           </div>
         )}
