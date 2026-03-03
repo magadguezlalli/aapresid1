@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  Cell, Legend, RadarChart, Radar, PolarGrid, PolarAngleAxis
+  Cell, Legend, RadarChart, Radar, PolarGrid, PolarAngleAxis, PieChart, Pie
 } from "recharts";
 
 // ─── PALETTE ───────────────────────────────────────────────────────────────
