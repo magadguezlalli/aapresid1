@@ -250,10 +250,10 @@ function MapSection({ data, filtered }) {
   return (
     <Card>
       <STitle>🗺️ Mapa de Nodos</STitle>
-      <div style={{ display:"flex", gap:20, alignItems:"flex-start", flexWrap:"wrap" }}>
+      <div style={{ display:"flex", gap:20, alignItems:"stretch", flexWrap:"wrap" }}>
 
         {/* MAP */}
-        <svg viewBox="0 0 300 560" style={{ width:260, flexShrink:0, borderRadius:8, border:`1px solid ${C5}`, background:"#c8dff0" }}>
+        <svg viewBox="0 0 300 560" style={{ width:260, flexShrink:0, borderRadius:8, border:`1px solid ${C5}`, background:"#c8dff0", alignSelf:"stretch", height:"100%" }}>
           <path d={ARG_PATH} fill="#f2ead6" stroke="#9e7a3a" strokeWidth="1.4" strokeLinejoin="round"/>
           {/* Labels */}
           <text x="145" y="18" textAnchor="middle" fill="#aaa" fontSize="7" fontStyle="italic">BOLIVIA</text>
