@@ -570,18 +570,7 @@ export default function Dashboard() {
                 </BarChart>
               </ResponsiveContainer>
             </Card>
-            <Card>
-              <STitle>Radar de valores</STitle>
-              <ResponsiveContainer width="100%" height={300}>
-                <RadarChart data={valoresData}>
-                  <PolarGrid stroke={C5}/>
-                  <PolarAngleAxis dataKey="name" tick={{ fontSize:9 }}/>
-                  <Radar name="Promedio" dataKey="score" stroke={C1} fill={C2} fillOpacity={0.4}/>
-                  <Tooltip content={<CT/>}/>
-                </RadarChart>
-              </ResponsiveContainer>
-            </Card>
-            <Card>
+            <Card style={{ gridColumn:"1/-1" }}>
               <STitle>Identificación con la misión</STitle>
               <HBar data={misionDist} colorFn={i=>[C1,C2,C3,C5][i]||C5}/>
             </Card>
