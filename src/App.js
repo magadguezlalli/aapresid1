@@ -406,6 +406,7 @@ export default function Dashboard() {
     const keys = ["Evolución sistema productivo","Legitimidad social","Transformaciones tecnológicas","Marco regulatorio","Contexto económico","Mercados internacionales","Estándares sustentabilidad"];
     return keys.map(k => ({
       name: k,
+      pct: Math.round(filtered.filter(r => r.factores && r.factores.includes(k)).length / total * 100),
       value: Math.round(filtered.filter(r => r.factores && r.factores.includes(k)).length / total * 100)
     })).sort((a,b) => b.value - a.value);
   }, [filtered]);
