@@ -402,13 +402,13 @@ export default function Dashboard() {
   }, [filtered]);
 
   const factoresData = [
-    { name: "Evolución sistema productivo", value: 81 },
-    { name: "Legitimidad social", value: 63 },
-    { name: "Transformaciones tecnológicas", value: 56 },
-    { name: "Marco regulatorio", value: 21 },
-    { name: "Contexto económico nacional", value: 20 },
-    { name: "Mercados internacionales", value: 20 },
-    { name: "Estándares sustentabilidad", value: 20 },
+    { name: "Evolución sistema productivo", value: 78 },
+    { name: "Legitimidad social", value: 61 },
+    { name: "Transformaciones tecnológicas", value: 54 },
+    { name: "Marco regulatorio", value: 20 },
+    { name: "Contexto económico", value: 19 },
+    { name: "Mercados internacionales", value: 19 },
+    { name: "Estándares sustentabilidad", value: 19 },
   ];
 
   const rolesData = useMemo(() => {
@@ -673,7 +673,7 @@ export default function Dashboard() {
                   <Pie data={factoresData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={130} label={({name,value})=>`${name}: ${value}`} labelLine={true}>
                     {factoresData.map((_,i)=><Cell key={i} fill={PALETTE[i%PALETTE.length]}/>)}
                   </Pie>
-                  <Tooltip formatter={(v,n)=>[v+" respuestas", n]}/>
+                  <Tooltip formatter={(v,n)=>[v+"%", n]}/>
                   <Legend/>
                 </PieChart>
               </ResponsiveContainer>
