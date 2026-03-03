@@ -287,7 +287,7 @@ function MapSection({ data, filtered }) {
         <div style={{ flex:1, display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:12, alignContent:"start" }}>
           {MAP_NODES.map(n => {
             const d = nodeData[n.key];
-            if (defaults write com.apple.screencapture location ~/screenshots || d.total === 0) return (
+            if (!d || d.total === 0) return (
               <div key={n.key} style={{ background:"#fff", border:`1px solid ${C5}`, borderRadius:10, padding:12, opacity:0.5 }}>
                 <div style={{ fontWeight:800, color:C1, fontSize:13 }}>{n.label}</div>
                 <div style={{ fontSize:10, color:"#aaa" }}>{n.city}</div>
