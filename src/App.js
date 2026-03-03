@@ -401,6 +401,16 @@ export default function Dashboard() {
     }).filter(d=>d.score!=null).sort((a,b)=>b.score-a.score);
   }, [filtered]);
 
+  const factoresData = [
+    { name: "Evolución sistema productivo", value: 81 },
+    { name: "Legitimidad social", value: 63 },
+    { name: "Transformaciones tecnológicas", value: 56 },
+    { name: "Marco regulatorio", value: 21 },
+    { name: "Contexto económico nacional", value: 20 },
+    { name: "Mercados internacionales", value: 20 },
+    { name: "Estándares sustentabilidad", value: 20 },
+  ];
+
   const rolesData = useMemo(() => {
     const map = {};
     filtered.forEach(r => { if(r.rol) map[r.rol]=(map[r.rol]||0)+1; });
@@ -431,6 +441,7 @@ export default function Dashboard() {
     { id:"desempeño", label:"Desempeño" },
     { id:"textos", label:"Beneficios y Riesgos" },
     { id:"aspectos", label:"Aspectos Positivos y Cambios" },
+    { id:"factores", label:"Factores de Alcance" },
     { id:"identidad", label:"Identidad" },
     { id:"mapa", label:"Mapa" },
   ];
@@ -645,6 +656,27 @@ export default function Dashboard() {
                 % de respuestas que mencionan cada aspecto (múltiple selección)
               </p>
               <HBar data={aspectosCambiarData} colorFn={i=>PALETTE[i%PALETTE.length]}/>
+            </Card>
+          </div>
+        )}
+
+        {/* ── FACTORES ── */}
+        {tab==="factores" && (
+          <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:18 }}>
+            <Card style={{ gridColumn:"1/-1" }}>
+              <STitle>Factores que presionan a AAPRESID a ampliar su alcance (%)</STitle>
+              <p style={{ fontSize:12, color:"#888", marginTop:-12, marginBottom:12 }}>
+                % de respuestas que mencionan cada factor (múltiple selección)
+              </p>
+              <ResponsiveContainer width="100%" height={360}>
+                <PieChart>
+                  <Pie data={factoresData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={130} label={({name,value})=>`${name}: ${value}`} labelLine={true}>
+                    {factoresData.map((_,i)=><Cell key={i} fill={PALETTE[i%PALETTE.length]}/>)}
+                  </Pie>
+                  <Tooltip formatter={(v,n)=>[v+" respuestas", n]}/>
+                  <Legend/>
+                </PieChart>
+              </ResponsiveContainer>
             </Card>
           </div>
         )}
