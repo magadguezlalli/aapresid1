@@ -283,58 +283,64 @@ function MapSection({ data, filtered }) {
           })}
         </svg>
 
-        {/* HOVER PANEL */}
-        <div style={{ flex:1, minWidth:220 }}>
-          {hovered && h && h.total > 0 ? (
-            <div style={{ background:"#fff", border:`2px solid ${C2}`, borderRadius:12, padding:16, boxShadow:"0 4px 20px rgba(180,100,0,0.15)" }}>
-              <div style={{ fontWeight:800, color:C1, fontSize:16, marginBottom:2 }}>{hovered.label}</div>
-              <div style={{ fontSize:11, color:"#aaa", marginBottom:12 }}>{hovered.city}</div>
-              <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8, marginBottom:12 }}>
-                <div style={{ background:C6, borderRadius:8, padding:8, textAlign:"center" }}>
-                  <div style={{ fontSize:22, fontWeight:800, color:C1 }}>{h.misionPct}%</div>
-                  <div style={{ fontSize:9, color:"#666" }}>Identificación misión</div>
-                </div>
-                <div style={{ background:C6, borderRadius:8, padding:8, textAlign:"center" }}>
-                  <div style={{ fontSize:22, fontWeight:800, color:C1 }}>{h.satisfPct}%</div>
-                  <div style={{ fontSize:9, color:"#666" }}>Satisfacción</div>
-                </div>
+        {/* CARDS GRID */}
+        <div style={{ flex:1, display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:12, alignContent:"start" }}>
+          {MAP_NODES.map(n => {
+            const d = nodeData[n.key];
+            if (defaults write com.apple.screencapture location ~/screenshots || d.total === 0) return (
+              <div key={n.key} style={{ background:"#fff", border:`1px solid ${C5}`, borderRadius:10, padding:12, opacity:0.5 }}>
+                <div style={{ fontWeight:800, color:C1, fontSize:13 }}>{n.label}</div>
+                <div style={{ fontSize:10, color:"#aaa" }}>{n.city}</div>
+                <div style={{ fontSize:10, color:"#bbb", marginTop:8 }}>Sin datos</div>
               </div>
-              {h.topIdentidad && (
-                <div style={{ background:`${C3}44`, borderRadius:8, padding:"8px 12px", marginBottom:12, textAlign:"center" }}>
-                  <div style={{ fontSize:9, color:"#888", marginBottom:2 }}>IDENTIDAD EN UNA PALABRA</div>
-                  <div style={{ fontSize:17, fontWeight:800, color:C1 }}>"{h.topIdentidad}"</div>
+            );
+            return (
+              <div key={n.key} style={{ background:"#fff", border:`2px solid ${C2}`, borderRadius:10, padding:12, boxShadow:"0 2px 10px rgba(180,100,0,0.1)" }}>
+                <div style={{ fontWeight:800, color:C1, fontSize:13, marginBottom:1 }}>{n.label}</div>
+                <div style={{ fontSize:10, color:"#aaa", marginBottom:8 }}>{n.city}</div>
+                <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:6, marginBottom:8 }}>
+                  <div style={{ background:C6, borderRadius:6, padding:"5px 4px", textAlign:"center" }}>
+                    <div style={{ fontSize:16, fontWeight:800, color:C1 }}>{d.misionPct}%</div>
+                    <div style={{ fontSize:8, color:"#666" }}>Identificación misión</div>
+                  </div>
+                  <div style={{ background:C6, borderRadius:6, padding:"5px 4px", textAlign:"center" }}>
+                    <div style={{ fontSize:16, fontWeight:800, color:C1 }}>{d.satisfPct}%</div>
+                    <div style={{ fontSize:8, color:"#666" }}>Satisfacción</div>
+                  </div>
                 </div>
-              )}
-              <div style={{ fontSize:11, fontWeight:700, color:C4, marginBottom:4 }}>Top valores:</div>
-              {h.valScores?.map((v,i)=>(
-                <div key={i} style={{ fontSize:10, color:DARK, marginBottom:3 }}>
-                  <span style={{ color:PALETTE[i], fontWeight:700 }}>● </span>{v.name}: <strong>{v.avg?.toFixed(1)}/5</strong>
-                </div>
-              ))}
-              <div style={{ fontSize:11, fontWeight:700, color:C4, margin:"8px 0 4px" }}>Top funciones:</div>
-              {h.funScores?.map((f,i)=>(
-                <div key={i} style={{ fontSize:10, color:DARK, marginBottom:3 }}>
-                  <span style={{ color:PALETTE[i], fontWeight:700 }}>● </span>{f.name}: <strong>{f.avg?.toFixed(1)}/5</strong>
-                </div>
-              ))}
-              <div style={{ fontSize:11, fontWeight:700, color:C4, margin:"8px 0 4px" }}>Beneficios:</div>
-              {h.topBen?.map(([b],i)=>(
-                <div key={i} style={{ fontSize:9, color:DARK, marginBottom:2 }}>
-                  <span style={{ color:C2, fontWeight:700 }}>↑ </span>{b}
-                </div>
-              ))}
-              <div style={{ fontSize:11, fontWeight:700, color:C4, margin:"8px 0 4px" }}>Riesgos:</div>
-              {h.topRie?.length ? h.topRie.map(([r],i)=>(
-                <div key={i} style={{ fontSize:9, color:DARK, marginBottom:2 }}>
-                  <span style={{ color:C1, fontWeight:700 }}>! </span>{r}
-                </div>
-              )) : <div style={{ fontSize:9, color:"#aaa" }}>Sin datos</div>}
-            </div>
-          ) : (
-            <div style={{ display:"flex", alignItems:"center", justifyContent:"center", minHeight:220, color:"#bbb", fontSize:13, textAlign:"center", padding:20 }}>
-              <div><div style={{ fontSize:36, marginBottom:10 }}>👆</div>Clickear un nodo para ver sus métricas</div>
-            </div>
-          )}
+                {d.topIdentidad && (
+                  <div style={{ background:`${C3}44`, borderRadius:6, padding:"5px 8px", marginBottom:8, textAlign:"center" }}>
+                    <div style={{ fontSize:8, color:"#888", marginBottom:1 }}>IDENTIDAD EN UNA PALABRA</div>
+                    <div style={{ fontSize:13, fontWeight:800, color:C1 }}>"{d.topIdentidad}"</div>
+                  </div>
+                )}
+                <div style={{ fontSize:10, fontWeight:700, color:C4, marginBottom:3 }}>Top valores:</div>
+                {d.valScores?.map((v,i)=>(
+                  <div key={i} style={{ fontSize:9, color:DARK, marginBottom:2 }}>
+                    <span style={{ color:PALETTE[i], fontWeight:700 }}>● </span>{v.name}: <strong>{v.avg?.toFixed(1)}/5</strong>
+                  </div>
+                ))}
+                <div style={{ fontSize:10, fontWeight:700, color:C4, margin:"6px 0 3px" }}>Top funciones:</div>
+                {d.funScores?.map((f,i)=>(
+                  <div key={i} style={{ fontSize:9, color:DARK, marginBottom:2 }}>
+                    <span style={{ color:PALETTE[i], fontWeight:700 }}>● </span>{f.name}: <strong>{f.avg?.toFixed(1)}/5</strong>
+                  </div>
+                ))}
+                <div style={{ fontSize:10, fontWeight:700, color:C4, margin:"6px 0 3px" }}>Beneficios:</div>
+                {d.topBen?.map(([b],i)=>(
+                  <div key={i} style={{ fontSize:9, color:DARK, marginBottom:2 }}>
+                    <span style={{ color:C2, fontWeight:700 }}>↑ </span>{b}
+                  </div>
+                ))}
+                <div style={{ fontSize:10, fontWeight:700, color:C4, margin:"6px 0 3px" }}>Riesgos:</div>
+                {d.topRie?.length ? d.topRie.map(([r],i)=>(
+                  <div key={i} style={{ fontSize:9, color:DARK, marginBottom:2 }}>
+                    <span style={{ color:C1, fontWeight:700 }}>! </span>{r}
+                  </div>
+                )) : <div style={{ fontSize:9, color:"#aaa" }}>Sin datos</div>}
+              </div>
+            );
+          })}
         </div>
       </div>
     </Card>
