@@ -141,11 +141,11 @@ function WordCloud({ words }) {
   const base = words && words.length ? words : WORDS;
   const sorted = [...base].sort((a,b) => b.count - a.count);
   const max = sorted[0]?.count || 1;
-  const minFont = 13, maxFont = 72;
+  const minFont = 13, maxFont = 58;
   const seed = (i) => ((i * 2654435761) >>> 0) / 4294967296;
   const rows = [];
   let currentRow = [], rowWidth = 0;
-  const maxRowWidth = 600;
+  const maxRowWidth = 560;
   sorted.forEach((w, i) => {
     const fontSize = Math.round(minFont + (w.count / max) * (maxFont - minFont));
     const approxW = w.text.length * fontSize * 0.6 + 20;
@@ -165,7 +165,7 @@ function WordCloud({ words }) {
   rows.forEach((row, ri) => {
     const maxFS = Math.max(...row.map(w => w.fontSize));
     const totalW = row.reduce((s, w) => s + w.approxW + 8, 0);
-    let x = (640 - totalW) / 2 + 10;
+    let x = (600 - totalW) / 2 + 10;
     row.forEach((w, wi) => {
       layoutWords.push({ ...w, x, y: y + maxFS * 0.8 });
       x += w.approxW + 8 + seed(ri * 10 + wi) * 10;
@@ -174,7 +174,7 @@ function WordCloud({ words }) {
   });
   return (
     <div style={{ background:`linear-gradient(135deg, ${C6}44, #fff)`, borderRadius:12, padding:16, border:`1px solid ${C5}` }}>
-      <svg viewBox={`0 0 640 ${totalHeight + 30}`} width="100%" style={{ display:"block" }}>
+      <svg viewBox={`0 0 600 ${totalHeight + 30}`} width="100%" style={{ display:"block" }}>
         {layoutWords.map((w, i) => (
           <text key={i} x={w.x} y={w.y} fontSize={w.fontSize} fill={PALETTE[i % PALETTE.length]}
             fontWeight={w.count >= 5 ? "800" : w.count >= 2 ? "600" : "400"}
@@ -659,7 +659,7 @@ export default function Dashboard() {
             { text:"Sostenibilidad",  count:7  },
             { text:"Suelo",           count:6  },
             { text:"Regenerar",       count:5  },
-            { text:"/sistema SD",     count:4  },
+            { text:"sistema SD",     count:4  },
             { text:"Innovación",      count:4  },
             { text:"Conciencia",      count:3  },
             { text:"Respeto",         count:3  },
