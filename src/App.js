@@ -593,16 +593,16 @@ export default function Dashboard() {
         {/* ── MISIÓN Y FUTURO ── */}
         {tab==="misionfuturo" && (() => {
           const misionData = [
-            { name:"Me representa totalmente", value:62.5, color:"#7B3FA0" },
-            { name:"Me representa bastante",   value:28.1, color:"#2E7D32" },
-            { name:"Me representa medianamente", value:6.3, color:"#F07832" },
-            { name:"Me representa poco",       value:3.1, color:"#D4500A" },
+            { name:"Me representa totalmente",   value:62.5, color:C1 },
+            { name:"Me representa bastante",     value:28.1, color:C2 },
+            { name:"Me representa medianamente", value:6.3,  color:C3 },
+            { name:"Me representa poco",         value:3.1,  color:C5 },
           ];
           const alcanceData = [
             { name:"Sí, pero gradualmente cuidando la identidad", value:50,   color:C1 },
-            { name:"Sí, claramente debería hacerlo",              value:25,   color:"#1565C0" },
+            { name:"Sí, claramente debería hacerlo",              value:25,   color:C2 },
             { name:"No lo sé / prefiero analizarlo más",          value:12.5, color:C3 },
-            { name:"No, mantenernos en siembra directa",          value:12.5, color:"#2E7D32" },
+            { name:"No, mantenernos en siembra directa",          value:12.5, color:C4 },
           ];
           const identFuturoWords = [
             { text:"Sustentabilidad", count:30 },
