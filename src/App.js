@@ -136,7 +136,7 @@ const STitle = ({ children }) => (
   </h2>
 );
 
-// ─── WORD CLOUD ────────────────────────────────────────────────────────────
+// ─── WORD CLOUD (para palabras cortas) ────────────────────────────────────
 function WordCloud({ words }) {
   const base = words && words.length ? words : WORDS;
   const sorted = [...base].sort((a,b) => b.count - a.count);
@@ -183,6 +183,62 @@ function WordCloud({ words }) {
           </text>
         ))}
       </svg>
+    </div>
+  );
+}
+
+// ─── VISION BUBBLES — para frases largas ──────────────────────────────────
+function VisionBubbles({ words }) {
+  const sorted = [...words].sort((a,b) => b.count - a.count);
+  const total = sorted.reduce((s,w) => s + w.count, 0);
+  const max = sorted[0]?.count || 1;
+
+  return (
+    <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
+      {sorted.map((w, i) => {
+        const pctVal = Math.round(w.count / total * 100);
+        const isMain = i < 2;
+        const barWidth = Math.round((w.count / max) * 100);
+        return (
+          <div key={i} style={{
+            background: isMain ? `linear-gradient(135deg, ${i===0?C1:C2}18, ${i===0?C1:C2}08)` : "#fafafa",
+            border: `${isMain ? 2 : 1}px solid ${isMain ? (i===0?C1:C2) : C5}`,
+            borderRadius: 12,
+            padding: isMain ? "16px 20px" : "10px 16px",
+            display:"flex", alignItems:"center", gap:16,
+          }}>
+            {/* Solo porcentaje */}
+            <div style={{ minWidth: isMain ? 64 : 48, textAlign:"center" }}>
+              <div style={{ fontSize: isMain ? 28 : 18, fontWeight:800, color: isMain ? (i===0?C1:C2) : C4, lineHeight:1 }}>
+                {pctVal}%
+              </div>
+            </div>
+
+            {/* Texto + barra */}
+            <div style={{ flex:1 }}>
+              <div style={{
+                fontSize: isMain ? 15 : 13,
+                fontWeight: isMain ? 700 : 500,
+                color: isMain ? DARK : "#555",
+                fontFamily: isMain ? "Georgia, serif" : "inherit",
+                marginBottom: 6,
+                lineHeight: 1.3,
+              }}>
+                {w.text}
+              </div>
+              <div style={{ background:"#eee", borderRadius:4, height:6, overflow:"hidden" }}>
+                <div style={{
+                  width:`${barWidth}%`,
+                  height:"100%",
+                  background: i===0 ? C1 : i===1 ? C2 : i===2 ? C3 : C5,
+                  borderRadius:4,
+                  transition:"width 0.3s"
+                }}/>
+              </div>
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }
@@ -234,7 +290,6 @@ function MapSection({ data, filtered }) {
     <Card>
       <STitle>🗺️ Mapa de Nodos</STitle>
       <div style={{ display:"flex", gap:20, alignItems:"stretch", flexWrap:"wrap" }}>
-        {/* MAP */}
         <svg viewBox="0 0 300 560" preserveAspectRatio="xMidYMid slice" style={{ width:260, flexShrink:0, borderRadius:8, border:`1px solid ${C5}`, background:"#c8dff0", alignSelf:"stretch", height:"auto", minHeight:"100%" }}>
           <path d={ARG_PATH} fill="#f2ead6" stroke="#9e7a3a" strokeWidth="1.4" strokeLinejoin="round"/>
           <text x="145" y="18" textAnchor="middle" fill="#aaa" fontSize="7" fontStyle="italic">BOLIVIA</text>
@@ -262,7 +317,6 @@ function MapSection({ data, filtered }) {
           })}
         </svg>
 
-        {/* CARDS GRID — sin satisfacción */}
         <div style={{ flex:1, display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:12, alignContent:"start" }}>
           {MAP_NODES.map(n => {
             const d = nodeData[n.key];
@@ -277,7 +331,6 @@ function MapSection({ data, filtered }) {
               <div key={n.key} style={{ background:"#fff", border:`2px solid ${C2}`, borderRadius:10, padding:12, boxShadow:"0 2px 10px rgba(180,100,0,0.1)" }}>
                 <div style={{ fontWeight:800, color:C1, fontSize:13, marginBottom:1 }}>{n.label}</div>
                 <div style={{ fontSize:10, color:"#aaa", marginBottom:8 }}>{n.city}</div>
-                {/* Solo identificación con la misión */}
                 <div style={{ background:C6, borderRadius:6, padding:"5px 4px", textAlign:"center", marginBottom:8 }}>
                   <div style={{ fontSize:16, fontWeight:800, color:C1 }}>{d.misionPct}%</div>
                   <div style={{ fontSize:8, color:"#666" }}>Identificación misión</div>
@@ -389,7 +442,6 @@ export default function Dashboard() {
     return Object.entries(map).filter(([,v])=>v>0).map(([name,v])=>({ name, pct:Math.round(v/n*100), count:v }));
   }, [filtered,n]);
 
-  // Tabs sin Desempeño ni Aspectos
   const tabs = [
     { id:"resumen",   label:"Resumen" },
     { id:"perfil",    label:"Perfil" },
@@ -411,13 +463,19 @@ export default function Dashboard() {
     </div>
   );
 
-  const HBar = ({ data, colorFn }) => (
-    <ResponsiveContainer width="100%" height={Math.max(data.length*42,100)}>
-      <BarChart data={data} layout="vertical" margin={{ left:4, right:40, top:0, bottom:40 }}>
+  const HBar = ({ data, colorFn, yWidth=200 }) => (
+    <ResponsiveContainer width="100%" height={Math.max(data.length*56, 120)}>
+      <BarChart data={data} layout="vertical" margin={{ left:4, right:50, top:4, bottom:4 }}>
         <XAxis type="number" domain={[0,100]} tickFormatter={v=>`${v}%`} tick={{ fontSize:11 }} />
-        <YAxis type="category" dataKey="name" width={180} tick={{ fontSize:11, fill:DARK }} />
+        <YAxis
+          type="category"
+          dataKey="name"
+          width={yWidth}
+          tick={{ fontSize:11, fill:DARK }}
+          tickLine={false}
+        />
         <Tooltip content={<CT/>} formatter={(v)=>`${v}%`}/>
-        <Bar dataKey="pct" name="%" radius={[0,6,6,0]} label={{ position:"right", formatter:v=>`${v}%`, fontSize:11, fill:DARK }}>
+        <Bar dataKey="pct" name="%" radius={[0,6,6,0]} barSize={22} label={{ position:"right", formatter:v=>`${v}%`, fontSize:11, fill:DARK }}>
           {data.map((_,i)=><Cell key={i} fill={colorFn(i)}/>)}
         </Bar>
       </BarChart>
@@ -463,7 +521,7 @@ export default function Dashboard() {
 
       <div style={{ padding:"16px 12px", maxWidth:1100, margin:"0 auto" }}>
 
-        {/* ── RESUMEN — solo 2 KPIs + misión + valores ── */}
+        {/* ── RESUMEN ── */}
         {tab==="resumen" && (
           <>
             <div style={{ display:"grid", gridTemplateColumns:"repeat(2,1fr)", gap:14, marginBottom:24 }}>
@@ -511,7 +569,7 @@ export default function Dashboard() {
           </div>
         )}
 
-        {/* ── VALORES Y MISIÓN — con Visión a 10 años ── */}
+        {/* ── VALORES Y MISIÓN ── */}
         {tab==="valores" && (
           <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:18 }}>
             <Card style={{ gridColumn:"1/-1" }}>
@@ -532,44 +590,34 @@ export default function Dashboard() {
               <STitle>Identificación con la misión</STitle>
               <HBar data={misionDist} colorFn={i=>[C1,C2,C3,C5][i]||C5}/>
             </Card>
-            {/* VISIÓN A 10 AÑOS */}
+
+            {/* VISIÓN A 10 AÑOS — reemplazado con VisionBubbles */}
             <Card style={{ gridColumn:"1/-1" }}>
               <STitle>🔭 Visión a 10 años — ¿Cuál debería ser el papel de AAPRESID?</STitle>
               <p style={{ fontSize:13, color:"#888", marginTop:-12, marginBottom:20 }}>
                 Distribución de las 104 respuestas sobre el rol futuro de la Asociación.
               </p>
-              <WordCloud words={VISION_WORDS} />
-              <div style={{ marginTop:24 }}>
-                <HBar
-                  data={[
-                    { name:"Red de innovación en sustentabilidad agropecuaria", pct:52, count:54 },
-                    { name:"Espacio articulación ciencia-productores-sociedad", pct:38, count:40 },
-                    { name:"Referencia técnica de la siembra directa", pct:5, count:5 },
-                    { name:"Respuestas únicas / otras visiones", pct:5, count:5 },
-                  ]}
-                  colorFn={i=>[C1,C2,C3,C5][i]||C5}
-                />
-              </div>
+              <VisionBubbles words={VISION_WORDS} />
             </Card>
           </div>
         )}
 
         {/* ── BENEFICIOS Y RIESGOS ── */}
         {tab==="textos" && (
-          <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:18 }}>
+          <div style={{ display:"grid", gridTemplateColumns:"1fr", gap:18 }}>
             <Card>
               <STitle>✅ Beneficios percibidos (%)</STitle>
               <p style={{ fontSize:12, color:"#888", marginTop:-12, marginBottom:12 }}>
                 % de respuestas que mencionan cada beneficio (múltiple selección)
               </p>
-              <HBar data={beneficiosData} colorFn={i=>PALETTE[i%PALETTE.length]}/>
+              <HBar data={beneficiosData} colorFn={i=>PALETTE[i%PALETTE.length]} yWidth={260}/>
             </Card>
             <Card>
               <STitle>⚠️ Riesgos percibidos (%)</STitle>
               <p style={{ fontSize:12, color:"#888", marginTop:-12, marginBottom:12 }}>
                 % de respuestas que mencionan cada riesgo (múltiple selección)
               </p>
-              <HBar data={riesgosData} colorFn={i=>[C1,C2,C3,C4,C5,C6][i%6]}/>
+              <HBar data={riesgosData} colorFn={i=>[C1,C2,C3,C4,C5,C6][i%6]} yWidth={260}/>
             </Card>
           </div>
         )}
@@ -632,7 +680,6 @@ export default function Dashboard() {
 
           return (
             <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:18 }}>
-              {/* Gráfico 1 — Identificación con la misión */}
               <Card>
                 <STitle>Identificación con la misión actual</STitle>
                 <p style={{ fontSize:12, color:"#888", marginTop:-12, marginBottom:4 }}>
@@ -651,7 +698,6 @@ export default function Dashboard() {
                 </ResponsiveContainer>
               </Card>
 
-              {/* Gráfico 2 — Ampliar alcance */}
               <Card>
                 <STitle>¿Ampliar alcance a otros sistemas productivos?</STitle>
                 <p style={{ fontSize:12, color:"#888", marginTop:-12, marginBottom:4 }}>
@@ -670,7 +716,6 @@ export default function Dashboard() {
                 </ResponsiveContainer>
               </Card>
 
-              {/* Gráfico 3 — Word cloud identidad futura */}
               <Card style={{ gridColumn:"1/-1" }}>
                 <STitle>💬 ¿Qué concepto definiría la identidad de AAPRESID en el futuro?</STitle>
                 <p style={{ fontSize:12, color:"#888", marginTop:-12, marginBottom:20 }}>
