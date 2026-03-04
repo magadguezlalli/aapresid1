@@ -780,8 +780,11 @@ export default function Dashboard() {
 
       </div>
 
-      <div style={{ textAlign:"center", padding:"12px", color:"#bbb", fontSize:11 }}>
-        AAPRESID · Encuesta institucional · Dashboard interactivo
+      <div style={{ textAlign:"center", padding:"16px 12px", color:"#aaa", fontSize:11, borderTop:`1px solid ${C6}`, marginTop:8 }}>
+        <div style={{ marginBottom:4 }}>AAPRESID · Encuesta institucional · Dashboard interactivo</div>
+        <div style={{ color:C4, fontWeight:600, fontSize:12 }}>
+          Desarrollado por <span style={{ color:C2 }}>Endógena Consulta</span> y <span style={{ color:C2 }}>Magali Dominguez Lalli</span>
+        </div>
       </div>
     </div>
   );
