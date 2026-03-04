@@ -488,12 +488,13 @@ export default function Dashboard() {
       <div style={{ background:`linear-gradient(135deg, #2C1A00 0%, ${C1} 60%, ${C2} 100%)`, padding:"16px 16px 0" }}>
         <div style={{ display:"flex", alignItems:"center", gap:14, marginBottom:12 }}>
           <span style={{ fontSize:38 }}>🌾</span>
-          <div>
+          <div style={{ flex:1 }}>
             <h1 style={{ fontFamily:"Georgia,serif", fontSize:24, fontWeight:700, margin:0, color:"#fff", letterSpacing:"0.02em" }}>
               AAPRESID — Presente y Futuro
             </h1>
             <p style={{ margin:0, color:"rgba(255,255,255,0.7)", fontSize:13 }}>Encuesta institucional · 104 respuestas</p>
           </div>
+          <img src="/Logo-endogena-naranja.png" alt="Endógena" style={{ height:52, objectFit:"contain" }}/>
         </div>
         <div style={{ display:"flex", gap:4, flexWrap:"wrap" }}>
           {tabs.map(t=>(
