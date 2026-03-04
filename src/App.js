@@ -398,6 +398,7 @@ export default function Dashboard() {
     { id:"factores",  label:"Factores de Alcance" },
     { id:"identidad", label:"Identidad" },
     { id:"mapa",      label:"Mapa" },
+    { id:"misionfuturo", label:"Misión y futuro" },
   ];
 
   const FSelect = ({ label, val, opts, onChange }) => (
@@ -588,6 +589,98 @@ export default function Dashboard() {
 
         {/* ── MAPA ── */}
         {tab==="mapa" && <MapSection data={RAW} filtered={filtered}/>}
+
+        {/* ── MISIÓN Y FUTURO ── */}
+        {tab==="misionfuturo" && (() => {
+          const misionData = [
+            { name:"Me representa totalmente", value:62.5, color:"#7B3FA0" },
+            { name:"Me representa bastante",   value:28.1, color:"#2E7D32" },
+            { name:"Me representa medianamente", value:6.3, color:"#F07832" },
+            { name:"Me representa poco",       value:3.1, color:"#D4500A" },
+          ];
+          const alcanceData = [
+            { name:"Sí, pero gradualmente cuidando la identidad", value:50,   color:C1 },
+            { name:"Sí, claramente debería hacerlo",              value:25,   color:"#1565C0" },
+            { name:"No lo sé / prefiero analizarlo más",          value:12.5, color:C3 },
+            { name:"No, mantenernos en siembra directa",          value:12.5, color:"#2E7D32" },
+          ];
+          const identFuturoWords = [
+            { text:"Sustentabilidad", count:30 },
+            { text:"Futuro",          count:12 },
+            { text:"Herencia",        count:8  },
+            { text:"Sostenibilidad",  count:7  },
+            { text:"Suelo",           count:6  },
+            { text:"Regenerar",       count:5  },
+            { text:"/sistema SD",     count:4  },
+            { text:"Innovación",      count:4  },
+            { text:"Conciencia",      count:3  },
+            { text:"Respeto",         count:3  },
+          ];
+
+          const CustomPieLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, name }) => {
+            if (percent < 0.05) return null;
+            const RADIAN = Math.PI / 180;
+            const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+            const x = cx + radius * Math.cos(-midAngle * RADIAN);
+            const y = cy + radius * Math.sin(-midAngle * RADIAN);
+            return (
+              <text x={x} y={y} fill="white" textAnchor="middle" dominantBaseline="central" fontSize={13} fontWeight="700">
+                {`${(percent * 100).toFixed(1)}%`}
+              </text>
+            );
+          };
+
+          return (
+            <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:18 }}>
+              {/* Gráfico 1 — Identificación con la misión */}
+              <Card>
+                <STitle>Identificación con la misión actual</STitle>
+                <p style={{ fontSize:12, color:"#888", marginTop:-12, marginBottom:4 }}>
+                  Impulsar sistemas de producción sustentables de alimentos, fibras y energía, a través de la innovación en red
+                </p>
+                <p style={{ fontSize:11, color:C4, marginBottom:16 }}>32 respuestas</p>
+                <ResponsiveContainer width="100%" height={260}>
+                  <PieChart>
+                    <Pie data={misionData} dataKey="value" cx="50%" cy="50%" outerRadius={110}
+                      labelLine={false} label={<CustomPieLabel/>}>
+                      {misionData.map((d,i) => <Cell key={i} fill={d.color}/>)}
+                    </Pie>
+                    <Legend formatter={(value) => <span style={{ fontSize:11, color:DARK }}>{value}</span>}/>
+                    <Tooltip formatter={(v) => `${v}%`}/>
+                  </PieChart>
+                </ResponsiveContainer>
+              </Card>
+
+              {/* Gráfico 2 — Ampliar alcance */}
+              <Card>
+                <STitle>¿Ampliar alcance a otros sistemas productivos?</STitle>
+                <p style={{ fontSize:12, color:"#888", marginTop:-12, marginBottom:4 }}>
+                  Maní, papa, cultivos hortícolas, etc. que no se basen en siembra directa
+                </p>
+                <p style={{ fontSize:11, color:C4, marginBottom:16 }}>32 respuestas</p>
+                <ResponsiveContainer width="100%" height={260}>
+                  <PieChart>
+                    <Pie data={alcanceData} dataKey="value" cx="50%" cy="50%" outerRadius={110}
+                      labelLine={false} label={<CustomPieLabel/>}>
+                      {alcanceData.map((d,i) => <Cell key={i} fill={d.color}/>)}
+                    </Pie>
+                    <Legend formatter={(value) => <span style={{ fontSize:11, color:DARK }}>{value}</span>}/>
+                    <Tooltip formatter={(v) => `${v}%`}/>
+                  </PieChart>
+                </ResponsiveContainer>
+              </Card>
+
+              {/* Gráfico 3 — Word cloud identidad futura */}
+              <Card style={{ gridColumn:"1/-1" }}>
+                <STitle>💬 ¿Qué concepto definiría la identidad de AAPRESID en el futuro?</STitle>
+                <p style={{ fontSize:12, color:"#888", marginTop:-12, marginBottom:20 }}>
+                  Palabras mencionadas por los participantes. El tamaño refleja la frecuencia.
+                </p>
+                <WordCloud words={identFuturoWords}/>
+              </Card>
+            </div>
+          );
+        })()}
 
         {/* ── IDENTIDAD ── */}
         {tab==="identidad" && (() => {
