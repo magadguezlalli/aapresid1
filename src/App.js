@@ -604,7 +604,7 @@ export default function Dashboard() {
 
         {/* ── BENEFICIOS Y RIESGOS ── */}
         {tab==="textos" && (
-          <div style={{ display:"grid", gridTemplateColumns:"1fr", gap:18 }}>
+          <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:18 }}>
             <Card>
               <STitle>✅ Beneficios percibidos (%)</STitle>
               <p style={{ fontSize:12, color:"#888", marginTop:-12, marginBottom:12 }}>
