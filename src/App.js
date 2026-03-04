@@ -494,7 +494,7 @@ export default function Dashboard() {
             </h1>
             <p style={{ margin:0, color:"rgba(255,255,255,0.7)", fontSize:13 }}>Encuesta institucional · 104 respuestas</p>
           </div>
-          <img src="/Logo-endogena-naranja.png" alt="Endógena" style={{ height:52, objectFit:"contain" }}/>
+          <img src="/Logo-endogena-naranja.png" alt="Endógena" style={{ height:72, objectFit:"contain" }}/>
         </div>
         <div style={{ display:"flex", gap:4, flexWrap:"wrap" }}>
           {tabs.map(t=>(
